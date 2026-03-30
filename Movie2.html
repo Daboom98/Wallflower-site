@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Perks of Being a Wallflower</title>
+   <link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="favicon.png">
+    <style>
+        :root {
+            --bg-top: #e3cfb6;
+            --bg-bottom: #e6d0af;
+            --card: rgba(255, 252, 246, 0.92);
+            --card-border: rgba(97, 76, 62, 0.12);
+            --text: #2f2a26;
+            --muted: #6e625a;
+            --accent: #b76e55;
+            --accent-dark: #b3654e;
+            --soft-accent: #ead4c8;
+            --shadow: 0 12px 30px rgba(62, 45, 35, 0.10);
+            --radius: 18px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            font-family: Georgia, "Times New Roman", serif;
+            color: var(--text);
+            line-height: 1.7;
+            background:
+                radial-gradient(circle at top left, rgba(255, 255, 255, 0.55), transparent 38%),
+                radial-gradient(circle at bottom right, rgba(183, 110, 85, 0.08), transparent 30%),
+                linear-gradient(to bottom, var(--bg-top), var(--bg-bottom));
+            min-height: 100vh;
+        }
+
+        .page {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1, h2 {
+            margin-top: 0;
+            color: var(--text);
+            font-family: "Trebuchet MS", Arial, sans-serif;
+        }
+
+        h1 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            letter-spacing: 0.3px;
+            margin-bottom: 14px;
+        }
+
+        h2 {
+            font-size: clamp(1.3rem, 2.5vw, 1.7rem);
+            margin-bottom: 14px;
+        }
+
+        p {
+            margin-top: 0;
+            color: var(--muted);
+        }
+
+        .section,
+        .movie-card,
+        .topbar {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(8px);
+        }
+
+        .section {
+            margin-bottom: 28px;
+            padding: 22px;
+            border-radius: var(--radius);
+        }
+
+        .topbar {
+            position: sticky;
+            top: 12px;
+            z-index: 1000;
+            border-radius: var(--radius);
+            padding: 14px 18px;
+            margin-bottom: 20px;
+        }
+
+        .topbar-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .brand {
+            font-family: "Trebuchet MS", Arial, sans-serif;
+            font-weight: 700;
+            color: var(--text);
+            letter-spacing: 0.2px;
+        }
+
+        .nav-toggle {
+            display: none;
+        }
+
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            font-size: 1.6rem;
+            user-select: none;
+            color: var(--text);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text);
+            font-family: "Trebuchet MS", Arial, sans-serif;
+            font-weight: 700;
+            padding: 8px 13px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.5);
+            border: 1px solid rgba(183, 110, 85, 0.12);
+            transition: 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            background: var(--soft-accent);
+            color: var(--accent-dark);
+        }
+
+        .movie-card {
+            display: flex;
+            gap: 22px;
+            padding: 22px;
+            border-radius: var(--radius);
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            align-items: flex-start;
+        }
+
+        .movie-poster {
+            width: 210px;
+            height: 315px;
+            border-radius: 14px;
+            overflow: hidden;
+            flex-shrink: 0;
+            box-shadow: 0 10px 22px rgba(45, 32, 25, 0.18);
+        }
+
+        .movie-poster img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .movie-info {
+            flex: 1;
+            min-width: 240px;
+        }
+
+        .movie-info p {
+            margin: 8px 0;
+            font-size: 1rem;
+        }
+
+        .movie-info strong {
+            color: var(--text);
+        }
+
+        .movie-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 16px;
+        }
+
+        .pill {
+            display: inline-block;
+            padding: 7px 12px;
+            border-radius: 999px;
+            background: rgba(183, 110, 85, 0.12);
+            color: var(--accent-dark);
+            font-family: "Trebuchet MS", Arial, sans-serif;
+            font-size: 0.92rem;
+            font-weight: 700;
+        }
+
+        .movie-trailer {
+            width: 360px;
+            flex-shrink: 0;
+        }
+
+        .trailer-box {
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1px solid rgba(97, 76, 62, 0.12);
+            box-shadow: 0 10px 22px rgba(45, 32, 25, 0.10);
+            background: rgba(255,255,255,0.55);
+        }
+
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%;
+            background: #000;
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        .trailer-text {
+            padding: 14px;
+        }
+
+        .trailer-text p {
+            margin-bottom: 12px;
+        }
+
+        .trailer-link {
+            display: inline-block;
+            text-decoration: none;
+            background: var(--accent);
+            color: #fff;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-family: "Trebuchet MS", Arial, sans-serif;
+            font-weight: 700;
+            transition: 0.2s ease;
+        }
+
+        .trailer-link:hover {
+            background: var(--accent-dark);
+        }
+
+        .cast-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            gap: 16px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            scrollbar-width: thin;
+        }
+
+        .cast-list li {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 155px;
+            background: rgba(255,255,255,0.65);
+            padding: 12px;
+            border-radius: 16px;
+            box-shadow: 0 6px 16px rgba(45, 32, 25, 0.08);
+            flex-shrink: 0;
+            text-align: center;
+        }
+
+        .cast-photo {
+            width: 112px;
+            height: 165px;
+            overflow: hidden;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            box-shadow: 0 8px 16px rgba(45, 32, 25, 0.14);
+        }
+
+        .cast-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .cast-name {
+            font-family: "Trebuchet MS", Arial, sans-serif;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .cast-role {
+            color: var(--muted);
+            font-size: 0.95rem;
+            margin-top: 4px;
+        }
+
+        .cast-hint {
+            margin-top: 12px;
+            font-size: 0.92rem;
+            color: var(--muted);
+        }
+
+        .fun-facts {
+            list-style: disc;
+            padding-left: 22px;
+            margin: 0;
+        }
+
+        .fun-facts li {
+            margin-bottom: 10px;
+            color: #3a332f;
+        }
+
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .data-item {
+            background: rgba(255,255,255,0.55);
+            border: 1px solid rgba(97, 76, 62, 0.10);
+            padding: 14px;
+            border-radius: 14px;
+        }
+
+        .data-item strong {
+            display: block;
+            margin-bottom: 4px;
+            color: var(--text);
+            font-family: "Trebuchet MS", Arial, sans-serif;
+        }
+
+        @media (max-width: 900px) {
+            .movie-card {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .movie-info {
+                text-align: center;
+            }
+
+            .movie-meta {
+                justify-content: center;
+            }
+
+            .movie-trailer {
+                width: 100%;
+                max-width: 520px;
+            }
+
+            .data-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 650px) {
+            .page {
+                padding: 14px;
+            }
+
+            h1 {
+                font-size: 1.7rem;
+            }
+
+            .hamburger {
+                display: block;
+                margin-left: auto;
+            }
+
+            .nav-links {
+                display: none;
+                width: 100%;
+                flex-direction: column;
+                gap: 8px;
+                margin-top: 12px;
+            }
+
+            .nav-toggle:checked ~ .nav-links {
+                display: flex;
+            }
+
+            .movie-poster {
+                width: 175px;
+                height: 262px;
+            }
+
+            .section {
+                padding: 16px;
+            }
+
+            .cast-list {
+                gap: 14px;
+            }
+
+            .cast-list li {
+                min-width: 140px;
+            }
+        }
+    </style>
+
+</head>
+<body>
+    <div class="page">
+
+        <div class="topbar">
+            <div class="topbar-inner">
+                <div class="brand">The Perks of Being a Wallflower</div>
+
+                <input type="checkbox" id="nav-toggle" class="nav-toggle">
+                <label for="nav-toggle" class="hamburger">☰</label>
+
+                <div class="nav-links">
+                    <a href="#apraksts">Apraksts</a>
+                    <a href="#aktieri">Aktieri</a>
+                    <a href="#fakti">Fun facts</a>
+                    <a href="#citi">Citi dati</a>
+                </div>
+            </div>
+        </div>
+
+        <h1>The Perks of Being a Wallflower</h1>
+
+        <div class="movie-card">
+    <div class="movie-poster">
+        <img src="COVER_PERKS.jpeg" alt="The Perks of Being a Wallflower plakāts">
+    </div>
+
+    <div class="movie-info">
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
+            <div style="width:60px; height:60px; overflow:hidden; border-radius:50%; flex-shrink:0; box-shadow:0 4px 12px rgba(0,0,0,0.12);">
+                <img src="STEVE.jpeg" alt="Stīvens Čbovskis" style="width:100%; height:100%; object-fit:cover;">
+            </div>
+            <p><strong>Režisors:</strong> Stīvens Čbovskis</p>
+        </div>
+        <p><strong>Gads:</strong> 2012</p>
+        <p><strong>Žanrs:</strong> Drāma / Pieaugšanas filma / Romantiska</p>
+        <p><strong>Ilgums:</strong> 1h 45min</p>
+        <p><strong>Vērtējums:</strong> 7,9/10</p>
+
+        <div class="movie-meta">
+            <span class="pill">Draudzība</span>
+            <span class="pill">Pieaugšana</span>
+            <span class="pill">Nostalgija</span>
+            <span class="pill">Emocijas</span>
+        </div>
+    </div>
+
+    <div class="movie-trailer">
+        <div class="trailer-box">
+            <div class="video-wrapper">
+                <iframe
+                    src="https://www.youtube.com/embed/n5rh7O4IDc0"
+                    title="The Perks of Being a Wallflower treileris"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowfullscreen>
+                </iframe>
+            </div>
+            <div class="trailer-text">
+                <p>'The Perks of Being a Wallflower' treileris.</p>
+                <a class="trailer-link" href="https://youtu.be/n5rh7O4IDc0" target="_blank" rel="noopener noreferrer">
+                    Atvērt treileri
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+        <div class="section" id="apraksts">
+            <h2>Apraksts</h2>
+            <p>
+                The Perks of Being a Wallflower ir emocionāls stāsts par jaunieti Čārliju, kautrīgu un jūtīgu vidusskolnieku,
+                kurš cenšas atrast savu vietu draugu un skolas vidē. Viņš nesen pārdzīvojis traumu un cīnās ar iekšējām bailēm,
+                vienlaikus mēģinot saprast sevi un savas emocijas. Filma attēlo Čārlija ceļojumu caur draudzību, mīlestību un
+                pieaugšanu, iepazīstinot viņu ar brīvdomīgiem jauniešiem Semī un Patriku, kas palīdz viņam atklāt prieku,
+                piedošanu un paša identitāti. Stāsts ir sirsnīgs un reizēm arī sāpīgs, parādot vidusskolas realitātes,
+                ģimenes sarežģījumus un dzīves skaistumu, kas nāk ar pieaugšanu.
+            </p>
+        </div>
+
+        <div class="section" id="aktieri">
+            <h2>Galvenie varoņi un aktieri</h2>
+            <ul class="cast-list">
+                <li>
+                    <div class="cast-photo">
+                        <img src="Charlie.jpg" alt="Čārlijs">
+                    </div>
+                    <div class="cast-name">Logans Lermans</div>
+                    <div class="cast-role">Čārlijs</div>
+                </li>
+
+                <li>
+                    <div class="cast-photo">
+                        <img src="SAM.jpeg" alt="Semī">
+                    </div>
+                    <div class="cast-name">Emma Votsons</div>
+                    <div class="cast-role">Semī</div>
+                </li>
+
+                <li>
+                    <div class="cast-photo">
+                        <img src="PATRICK.jpeg" alt="Patriks">
+                    </div>
+                    <div class="cast-name">Ezra Millers</div>
+                    <div class="cast-role">Patriks</div>
+                </li>
+
+                <li>
+                    <div class="cast-photo">
+                        <img src="SAM2.jpeg" alt="Merija Elizabete">
+                    </div>
+                    <div class="cast-name">Me Vītmena</div>
+                    <div class="cast-role">Merija Elizabete</div>
+                </li>
+            </ul>
+            <div class="cast-hint">Velc uz sāniem, lai redzētu visus aktierus, ja ekrāns ir šaurs.</div>
+        </div>
+        <div class="section" id="supporting-cast">
+    <div class="section" id="supporting-cast">
+    <h2>Atbalstošie varoņi un aktieri</h2>
+    <ul class="cast-list">
+        <li>
+            <div class="cast-photo">
+                <img src="Paul_Rudd.jpg" alt="Mr. Anderson">
+            </div>
+            <div class="cast-name">Pauls Rads</div>
+            <div class="cast-role">Mr. Anderson (angļu valodas skolotājs)</div>
+        </li>
+        <li>
+            <div class="cast-photo">
+                <img src="Nina_Dobrev.jpg" alt="Candace Kelmeckis">
+            </div>
+            <div class="cast-name">Nina Dobreva</div>
+            <div class="cast-role">Kendiss Kelmekisa (Čārlija māsa)</div>
+        </li>
+        <li>
+            <div class="cast-photo">
+                <img src="Johnny_Simmons.jpg" alt="Brad Hayes">
+            </div>
+            <div class="cast-name">Džonijs Simmons</div>
+            <div class="cast-role">Breds Heiss</div>
+        </li>
+        <li>
+            <div class="cast-photo">
+                <img src="Erin_Wilhelmi.jpg" alt="Alice">
+            </div>
+            <div class="cast-name">Erina Vilhelmi</div>
+            <div class="cast-role">Ālise</div>
+        </li>
+        <li>
+            <div class="cast-photo">
+                <img src="Adam_Hagenbuch.jpg" alt="Bob">
+            </div>
+            <div class="cast-name">Ādams Hagembuhs</div>
+            <div class="cast-role">Bobs</div>
+        </li>
+
+        <li>
+            <div class="cast-photo">
+                <img src="Kate_Walsh.jpg" alt="Mrs. Kelmeckis">
+            </div>
+            <div class="cast-name">Keita Volša</div>
+            <div class="cast-role">Mrs. Kelmekisa</div>
+        </li>
+        <li>
+            <div class="cast-photo">
+                <img src="Dylan_McDermott.jpg" alt="Mr. Kelmeckis">
+            </div>
+            <div class="cast-name">Dīlans Makdermots</div>
+            <div class="cast-role">Mr. Kelmekiss</div>
+        </li>
+        <li>
+            <div class="cast-photo">
+                <img src="Melanie_Lynskey.jpg" alt="Helen">
+            </div>
+            <div class="cast-name">Melānija Linskija</div>
+            <div class="cast-role">Helēna (Čārlija tante)</div>
+        </li>
+        <li>
+            <div class="cast-photo">
+                <img src="Joan_Cusack.jpg" alt="Dr. Burton">
+            </div>
+            <div class="cast-name">Džoana Kask</div>
+            <div class="cast-role">Dr. Bērtona</div>
+        </li>
+        <li>
+            <div class="cast-photo">
+                <img src="Zane_Holtz.jpg" alt="Chris Kelmeckis">
+            </div>
+            <div class="cast-name">Zeins Holcs</div>
+            <div class="cast-role">Kriss Kelmekiss (Čārlija vecākais brālis)</div>
+        </li>
+        <li>
+            <div class="cast-photo">
+                <img src="Reece_Thompson.jpg" alt="Craig">
+            </div>
+            <div class="cast-name">Rīss Tompsons</div>
+            <div class="cast-role">Kreigs (Sema draugs)</div>
+        </li>
+        <li>
+            <div class="cast-photo">
+                <img src="Nicholas_Braun.jpg" alt="Ponytail Derek">
+            </div>
+            <div class="cast-name">Nikolas Brauns</div>
+            <div class="cast-role">Dereks ar zirgasti (Kendisas draugs)</div>
+        </li>
+        <li>
+            <div class="cast-photo">
+                <img src="Landon_Pigg.jpg" alt="Peter">
+            </div>
+            <div class="cast-name">Lendons Pigs</div>
+            <div class="cast-role">Pīters</div>
+        </li>
+        <li>
+            <div class="cast-photo">
+                <img src="Tom_Savini.jpg" alt="Mr. Callahan">
+            </div>
+            <div class="cast-name">Toms Savini</div>
+            <div class="cast-role">Mr. Kalhans</div>
+        </li>
+        <li>
+            <div class="cast-photo">
+                <img src="Julia_Garner.jpg" alt="Susan">
+            </div>
+            <div class="cast-name">Džūlija Gārnere</div>
+            <div class="cast-role">Sūzena</div>
+        </li>
+    </ul>
+    <div class="cast-hint">Velc uz sāniem, lai redzētu visus aktierus, ja ekrāns ir šaurs.</div>
+</div>
+
+        <div class="section" id="fakti">
+            <h2>Behind the Scenes / Fun Facts</h2>
+            <ul class="fun-facts">
+                <li>Filma ir balstīta uz Stīvena Čbovska romānu, un viņš pats arī režisēja filmu.</li>
+                <li>Noskaņa ir apzināti klusa, sirsnīga un personiska, lai vairāk atspoguļotu Čārlija iekšējo pasauli.</li>
+                <li>Skaņu celiņš palīdz radīt nostalģisku sajūtu, kas ļoti piestāv pieaugšanas stāstam.</li>
+                <li>Filma ir pazīstama ar spēcīgiem dialogiem un emocionālām ainām, kuras daudzi skatītāji atceras ilgi.</li>
+                <li>Čārlija stāsts parāda, cik grūti var būt tikt galā ar pagātni un vienlaikus atrast draugus, kuri tevi saprot.</li>
+            </ul>
+        </div>
+
+       <div class="section" id="citi">
+    <h2>Citi dati</h2>
+    <div class="data-grid">
+        <div class="data-item">
+            <strong>Valoda</strong>
+            Angļu
+        </div>
+        <div class="data-item">
+            <strong>Valsts</strong>
+            ASV
+        </div>
+        <div class="data-item">
+            <strong>Režisors</strong>
+            Stīvens Čbovskis
+        </div>
+        <div class="data-item">
+            <strong>Budžets</strong>
+            13 miljoni USD
+        </div>
+        <div class="data-item">
+            <strong>Ienākumi kinoteātros</strong>
+            33 miljoni USD
+        </div>
+        <div class="data-item">
+            <strong>Gads</strong>
+            2012
+        </div>
+        <div class="data-item">
+            <strong>Ilgums</strong>
+            1h 45min
+        </div>
+        <div class="data-item">
+            <strong>IMDb vērtējums</strong>
+            7,9/10
+        </div>
+        <div class="data-item">
+            <strong>MPAA Reitings</strong>
+            PG-13
+        </div>
+        <div class="data-item">
+            <strong>Žanrs</strong>
+            Drāma / Pieaugšanas filma / Romantiska
+        </div>
+        <div class="data-item">
+            <strong>Oficiālā mājaslapa</strong>
+            <a href="https://www.imdb.com/title/tt1659337/" target="_blank" rel="noopener noreferrer">IMDb lapā</a>
+        </div>
+        <div class="data-item">
+            <strong>Skaņu celiņš</strong>
+            Michael Brook
+        </div>
+    </div>
+</div>
+    
+</body>
+</html>
